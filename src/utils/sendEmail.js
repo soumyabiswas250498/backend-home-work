@@ -13,7 +13,6 @@ const transporter = nodemailer.createTransport({
 
 async function sendEmail(to, mode, data) {
 
-    console.log(to, mode, data)
 
     const htmlBody = `<!DOCTYPE html>
 <html>

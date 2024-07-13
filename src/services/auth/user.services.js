@@ -71,7 +71,6 @@ const generateAccessRefreshToken = async (user) => {
 const passwordCheck = async (email, password) => {
     const user = await User.findOne({ email });
     const isPasswordValid = await user.isPasswordCorrect(password);
-    console.log(isPasswordValid);
     if (!isPasswordValid) {
         throw new ApiError(401, 'Invalid credentials');
     }

@@ -36,7 +36,6 @@ const deleteHomeWork = asyncHandlerExpress(
         await validator(req.query, idSchema)
         const { id } = req.query;
         const deletedData = await deleteHWService(id, req.user);
-        console.log(deletedData);
         res.status(204).json(new ApiResponse(204, deletedData, 'Homeworks Deleted Successfully'))
     }
 )
