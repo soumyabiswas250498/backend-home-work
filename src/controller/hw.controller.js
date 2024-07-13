@@ -1,4 +1,4 @@
-import { addHomeWorkService, allHomeWorkServices, deleteHWService } from "../services/hw.services.js";
+import { addHomeWorkService, allHomeWorkServices, deleteHWService, updateHWService } from "../services/hw.services.js";
 import { asyncHandlerExpress } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
@@ -28,4 +28,14 @@ const deleteHomeWork = asyncHandlerExpress(
     }
 )
 
-export { addHomeWorkController, getAllHomeWork, deleteHomeWork }
+const updateHomeWork = asyncHandlerExpress(
+    async (req, res) => {
+        const { id } = req.query;
+        const { classroom, section, subject, heading, description } = req.body;
+        const file = req?.file;
+        const updatedHW = await updateHWService(id, req.user, { classroom, section, subject, heading, description, author: req.user.id, file: file?.filename });
+        res.status(200).json(new ApiResponse(201, updatedHW, 'All Homeworks Updated Successfully'))
+    }
+)
+
+export { addHomeWorkController, getAllHomeWork, deleteHomeWork, updateHomeWork }

@@ -2,6 +2,11 @@ import { User } from "../../models/users.model.js";
 import bcrypt from 'bcrypt';
 import { ApiError } from "../../utils/ApiError.js";
 import randomstring from "randomstring";
+import { sendEmail } from "../../utils/sendEmail.js";
+
+
+
+
 
 const checkExistingUser = async (params) => {
     const { userName, email } = params
@@ -33,13 +38,25 @@ const createUser = async (userName, email, password) => {
         length: parseInt(process.env.PASS_LENGTH),
         charset: 'alphanumeric'
     })
-    console.log(passwordTemp, '***')
+
     const createdObj = await User.create({ userName, email, password: passwordTemp });
+    await sendEmail(email, 'created', { userName: userName, email: email, password: passwordTemp })
     return { userName: createdObj.userName, email: createdObj.email };
 }
 
-const updateByEmail = async (email, params) => {
-    const updatedUser = await User.findOneAndUpdate({ email }, params);
+const updateUserService = async (id, params) => {
+    let pass;
+    params?.password && (params.password = randomstring.generate({
+        length: parseInt(process.env.PASS_LENGTH),
+        charset: 'alphanumeric'
+    }));
+    pass = params?.password;
+    if (params?.password) {
+        params.password = await bcrypt.hash(params?.password, 8);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, params, { new: true });
+    await sendEmail(updatedUser.email, 'updated', { userName: updatedUser.userName, email: updatedUser.email, password: pass || 'Unchanged' })
     return { email: updatedUser.email, userName: updatedUser.userName };
 }
 
@@ -68,5 +85,5 @@ const passwordCheck = async (email, password) => {
 
 
 
-export { createUser, checkExistingUser, updateByEmail, getUser, generateAccessRefreshToken, passwordCheck }
+export { createUser, checkExistingUser, updateUserService, getUser, generateAccessRefreshToken, passwordCheck }
 

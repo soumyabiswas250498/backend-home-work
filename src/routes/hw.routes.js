@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { userLogin, addUser } from '../controller/users.controller.js';
 import { verifyJWT, isAdmin } from '../middleware/auth.middleware.js';
 import { uploadSingleMiddleware } from '../middleware/storage.middleware.js';
-import { addHomeWorkController, getAllHomeWork, deleteHomeWork } from '../controller/hw.controller.js';
+import { addHomeWorkController, getAllHomeWork, deleteHomeWork, updateHomeWork } from '../controller/hw.controller.js';
 
 const hwRouter = Router();
 
@@ -13,8 +12,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 hwRouter.post('/add', verifyJWT, uploadSingleMiddleware, addHomeWorkController);
+hwRouter.put('/update', verifyJWT, uploadSingleMiddleware, updateHomeWork);
 hwRouter.get('/all', getAllHomeWork);
-hwRouter.delete('/delete', verifyJWT, deleteHomeWork)
+hwRouter.delete('/delete', verifyJWT, deleteHomeWork);
 
 
 hwRouter.get('/download/:filename', (req, res) => {

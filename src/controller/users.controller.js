@@ -1,6 +1,7 @@
 import { asyncHandlerExpress } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { createUser, passwordCheck } from "../services/auth/user.services.js";
+import { createUser, passwordCheck, updateUserService } from "../services/auth/user.services.js";
+
 
 
 
@@ -27,8 +28,18 @@ const addUser = asyncHandlerExpress(
 )
 
 
+const updateUser = asyncHandlerExpress(
+    async (req, res) => {
+        const { email, userName, password } = req.body;
+        const { id } = req.query
+        const updatedData = await updateUserService(id, { email, userName, password });
+        res.status(201).json(new ApiResponse(201, { updatedData }, 'User Updated Successfully'));
+    }
+)
 
 
 
 
-export { userLogin, addUser }
+
+
+export { userLogin, addUser, updateUser }
