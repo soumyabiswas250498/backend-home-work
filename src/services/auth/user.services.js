@@ -54,7 +54,6 @@ const updateUserService = async (id, params) => {
     if (params?.password) {
         params.password = await bcrypt.hash(params?.password, 8);
     }
-
     const updatedUser = await User.findByIdAndUpdate(id, params, { new: true });
     await sendEmail(updatedUser.email, 'updated', { userName: updatedUser.userName, email: updatedUser.email, password: pass || 'Unchanged' })
     return { email: updatedUser.email, userName: updatedUser.userName };

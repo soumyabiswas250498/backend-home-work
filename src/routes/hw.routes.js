@@ -3,21 +3,23 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { verifyJWT, isAdmin } from '../middleware/auth.middleware.js';
 import { uploadSingleMiddleware } from '../middleware/storage.middleware.js';
-import { addHomeWorkController, getAllHomeWork, deleteHomeWork, updateHomeWork } from '../controller/hw.controller.js';
+import { addHomeWorkController, getAllHomeWork, deleteHomeWork, updateHomeWork, getHomeWork } from '../controller/hw.controller.js';
 
 const hwRouter = Router();
 
-// Get the directory name of the current module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 
 hwRouter.post('/add', verifyJWT, uploadSingleMiddleware, addHomeWorkController);
 hwRouter.put('/update', verifyJWT, uploadSingleMiddleware, updateHomeWork);
 hwRouter.get('/all', getAllHomeWork);
+hwRouter.get('/:id', getHomeWork)
 hwRouter.delete('/delete', verifyJWT, deleteHomeWork);
 
 
 hwRouter.get('/download/:filename', (req, res) => {
+    // Get the directory name of the current module
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
     const filename = req.params.filename;
     const filePath = path.join(__dirname, '../uploads', filename);
     res.download(filePath, (err) => {

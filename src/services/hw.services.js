@@ -19,10 +19,21 @@ const addHomeWorkService = async (data) => {
     return newHomeWork;
 }
 
-const allHomeWorkServices = async () => {
-    const homeWorks = await HomeWork.find().populate('author', 'userName email _id').exec();
-    console.log(homeWorks, '***hw')
+const allHomeWorkServices = async ({ classRoom, subject, authorId }) => {
+    let query = {};
+
+    classRoom && (query.class = classRoom);
+    subject && (query.subject = subject);
+    authorId && (query.author = authorId);
+
+    const homeWorks = await HomeWork.find(query).populate('author', 'userName email _id').exec();
+
     return homeWorks
+}
+
+const getHomeWorkByID = async (id) => {
+    const homework = await HomeWork.findById(id);
+    return homework;
 }
 
 const deleteHWService = async (id, user) => {
@@ -40,7 +51,6 @@ const deleteHWService = async (id, user) => {
         } else {
             throw new ApiError(404, 'File Not Found')
         }
-
     }
 
     return deletedHW;
@@ -72,4 +82,4 @@ const updateHWService = async (id, user, data) => {
 }
 
 
-export { addHomeWorkService, allHomeWorkServices, deleteHWService, updateHWService }
+export { addHomeWorkService, allHomeWorkServices, deleteHWService, updateHWService, getHomeWorkByID }
