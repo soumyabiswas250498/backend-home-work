@@ -1,4 +1,5 @@
 import { User } from "../../models/users.model.js";
+import { HomeWork } from "../../models/homework.model.js";
 import bcrypt from 'bcrypt';
 import { ApiError } from "../../utils/ApiError.js";
 import randomstring from "randomstring";
@@ -30,6 +31,11 @@ const getUser = async (params) => {
         role: user.role,
         id: user._id,
     }
+}
+
+const getAllUsers = async () => {
+    const users = await User.find().select('-refreshToken -password');
+    return users;
 }
 
 
@@ -80,8 +86,26 @@ const passwordCheck = async (email, password) => {
 
 }
 
+const deleteUserService = async (id) => {
+    const user = await User.findById(id);
+    if (!user) {
+        throw new ApiError(404, 'User Not Found');
+    }
+
+    // Now find homeworks associated with this user's _id
+    const homeworks = await HomeWork.find({ author: id });
+    console.log(homeworks, '***')
+    if (homeworks?.length) {
+        throw new ApiError(409, 'User has homeworks. Delete homeworks first. Then delete this user.');
+    } else {
+        const deletedUser = await User.findByIdAndDelete(id);
+        console.log(deletedUser);
+        return { id: deletedUser._id, email: deletedUser.email, userName: deletedUser.userName };
+    }
+}
 
 
 
-export { createUser, checkExistingUser, updateUserService, getUser, generateAccessRefreshToken, passwordCheck }
+
+export { createUser, checkExistingUser, updateUserService, getUser, generateAccessRefreshToken, passwordCheck, getAllUsers, deleteUserService }
 
