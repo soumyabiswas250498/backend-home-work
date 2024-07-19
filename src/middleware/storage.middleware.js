@@ -4,6 +4,9 @@ import { ApiError } from "../utils/ApiError.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { fileUploader } from "../utils/FileUploader.js";
+import fs from 'fs';
+
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -40,11 +43,25 @@ const upload = multer({
 
 
 const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
-    upload.single('file')(req, res, (err) => {
-        if (err) {
-            return res.status(400).json({ error: err.message });
+    upload.single('file')(req, res, async (err) => {
+        const filePath = req.file.path;
+        try {
+            const fileName = await fileUploader(filePath);
+            console.log(fileName, '***fn');
+            if (!fileName) {
+                return res.status(500).json({ error: 'File upload failed' });
+            }
+            // Delete the file from disk storage
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Failed to delete local file:', err);
+                }
+            });
+            req.file.serverUploadedName = fileName;
+            next();
+        } catch (error) {
+            return res.status(500).json({ error: 'File upload failed' });
         }
-        next();
     });
 });
 

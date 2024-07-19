@@ -8,8 +8,8 @@ const addHomeWorkController = asyncHandlerExpress(
     async (req, res) => {
         await validator(req.body, homeworkSchema)
         const { classroom, section, subject, heading, description } = req.body;
-        const file = req.file;
-        const createdHomework = await addHomeWorkService({ classroom, section, subject, heading, description, author: req.user.id, file: file.filename })
+        const file = req.file.serverUploadedName;
+        const createdHomework = await addHomeWorkService({ classroom, section, subject, heading, description, author: req.user.id, file: file })
         res.status(200).json(new ApiResponse(201, { createdHomework }, 'Home Work Added Successfully'));
     }
 );
@@ -45,8 +45,8 @@ const updateHomeWork = asyncHandlerExpress(
         const { id } = req.query;
         await validator(req.query, idSchema)
         const { classroom, section, subject, heading, description } = req.body;
-        const file = req?.file;
-        const updatedHW = await updateHWService(id, req.user, { classroom, section, subject, heading, description, author: req.user.id, file: file?.filename });
+        const file = req.file.serverUploadedName;;
+        const updatedHW = await updateHWService(id, req.user, { classroom, section, subject, heading, description, author: req.user.id, file: file });
         res.status(200).json(new ApiResponse(201, updatedHW, 'All Homeworks Updated Successfully'))
     }
 )
