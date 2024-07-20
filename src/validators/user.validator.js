@@ -19,14 +19,12 @@ const loginSchema = Joi.object({
 
 const registerSchema = Joi.object({
     userName: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required()
         .messages({
-            'string.alphanum': 'Username must only contain alpha-numeric characters',
             'string.min': 'Username must be at least 3 characters long',
-            'string.max': 'Username must be at most 30 characters long',
+            'string.max': 'Username must be at most 30 characters long',  // Adjusted to match the max length you specified in the schema
             'string.empty': 'Username is required',
         }),
     email: Joi.string()
@@ -38,7 +36,6 @@ const registerSchema = Joi.object({
         }),
     password: Joi.string()
         .min(8)
-        .required()
         .messages({
             'string.min': 'Password must be at least 8 characters long',
             'string.empty': 'Password is required',

@@ -62,10 +62,10 @@ const updateHWService = async (id, user, data) => {
     if (!oldHW) {
         throw new ApiError(404, 'Homework Not Found');
     } else {
-        if (role === 'admin' || userId.equals(deletedHW.author)) {
+        if (role === 'admin' || userId.equals(oldHW.author)) {
 
             const newData = {
-                author: data?.author || oldHW?.author,
+                author: oldHW?.author,
                 class: data?.classroom || oldHW?.class,
                 section: data?.section || oldHW?.section,
                 subject: data?.subject || oldHW?.subject,

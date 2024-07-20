@@ -1,6 +1,6 @@
 import { asyncHandlerExpress } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { createUser, passwordCheck, updateUserService } from "../services/auth/user.services.js";
+import { createUser, passwordCheck, updateUserService, getAllUsers, deleteUserService } from "../services/auth/user.services.js";
 import validator from "../validators/validator.js";
 import { loginSchema, registerSchema, updateSchema } from "../validators/user.validator.js";
 
@@ -43,9 +43,26 @@ const updateUser = asyncHandlerExpress(
     }
 )
 
+const getAllUsersData = asyncHandlerExpress(
+    async (req, res) => {
+
+        const users = await getAllUsers();
+        res.status(200).json(new ApiResponse(200, { users }, 'User Found Successfully'));
+
+    }
+)
+
+const deleteUserController = asyncHandlerExpress(
+    async (req, res) => {
+        await validator(req.query, updateSchema)
+        const { id } = req.query;
+        const deletedUser = await deleteUserService(id);
+        res.status(200).json(new ApiResponse(200, { deletedUser }, 'User Found Successfully'));
+    }
+)
 
 
 
 
 
-export { userLogin, addUser, updateUser }
+export { userLogin, addUser, updateUser, getAllUsersData, deleteUserController }
