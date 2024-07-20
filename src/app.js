@@ -9,7 +9,8 @@ import hwRouter from './routes/hw.routes.js';
 
 const app = express();
 
-const allowedOrigins = process.env.CORS_ORIGINS.split(',');
+const allowedOrigins = process.env.CORS_ORIGIN.split(',');
+console.log(allowedOrigins)
 
 const corsOptions = {
   origin: (origin, callback) => {
