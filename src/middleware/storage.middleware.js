@@ -44,7 +44,14 @@ const upload = multer({
 
 const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
     upload.single('file')(req, res, async (err) => {
-        const filePath = req.file.path;
+        const filePath = req?.file?.path;
+
+        if (!filePath) {
+            req.noFile = true;
+            next();
+            return;
+        }
+
         try {
             const fileName = await fileUploader(filePath);
             console.log(fileName, '***fn');
@@ -57,7 +64,11 @@ const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
                     console.error('Failed to delete local file:', err);
                 }
             });
+
+
             req.file.serverUploadedName = fileName;
+
+
             next();
         } catch (error) {
             return res.status(500).json({ error: 'File upload failed' });

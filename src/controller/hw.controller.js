@@ -45,9 +45,17 @@ const updateHomeWork = asyncHandlerExpress(
         const { id } = req.query;
         await validator(req.query, idSchema)
         const { classroom, section, subject, heading, description } = req.body;
-        const file = req.file.serverUploadedName;;
-        const updatedHW = await updateHWService(id, req.user, { classroom, section, subject, heading, description, author: req.user.id, file: file });
-        res.status(200).json(new ApiResponse(201, updatedHW, 'All Homeworks Updated Successfully'))
+        const noFile = req.noFile;
+        if (noFile) {
+            const updatedHW = await updateHWService(id, req.user, { classroom, section, subject, heading, description, author: req.user.id });
+            res.status(200).json(new ApiResponse(201, updatedHW, 'All Homeworks Updated Successfully'))
+
+        } else {
+            const file = req.file.serverUploadedName;
+            const updatedHW = await updateHWService(id, req.user, { classroom, section, subject, heading, description, author: req.user.id, file: file });
+            res.status(200).json(new ApiResponse(201, updatedHW, 'All Homeworks Updated Successfully'))
+        }
+
     }
 )
 
