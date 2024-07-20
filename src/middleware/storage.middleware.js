@@ -5,19 +5,22 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { fileUploader } from "../utils/FileUploader.js";
-import fs, { unlink } from 'fs';
-
+import fs from 'fs';
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
+// Ensure the uploads directory exists
+const uploadDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Set up storage engine
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../uploads'));
+        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         cb(null, `v${Date.now()}-${file.originalname}`);
@@ -41,13 +44,12 @@ const upload = multer({
     fileFilter
 });
 
-
 const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
     upload.single('file')(req, res, async (err) => {
         const filePath = req?.file?.path;
 
-        console.log(err, '***fileError')
-        console.log(filePath, '***filePath')
+        console.log(err, '***fileError');
+        console.log(filePath, '***filePath');
 
         if (!filePath) {
             req.noFile = true;
@@ -68,10 +70,9 @@ const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
                 }
             });
 
-            console.log(fileName, '***unlink Success')
+            console.log(fileName, '***unlink Success');
 
             req.file.serverUploadedName = fileName;
-
 
             next();
         } catch (error) {
@@ -80,5 +81,4 @@ const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
     });
 });
 
-
-export { uploadSingleMiddleware }
+export { uploadSingleMiddleware };
