@@ -44,5 +44,4 @@ yarn.lock
 
 
 # Ignore contents of uploads folder but include the folder itself
- src/uploads/*
- !src/uploads/.gitkeep
+

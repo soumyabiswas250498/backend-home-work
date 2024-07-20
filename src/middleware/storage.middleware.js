@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { fileUploader } from "../utils/FileUploader.js";
-import fs from 'fs';
+import fs, { unlink } from 'fs';
 
 
 // Get the directory name of the current module
@@ -46,6 +46,9 @@ const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
     upload.single('file')(req, res, async (err) => {
         const filePath = req?.file?.path;
 
+        console.log(err, '***fileError')
+        console.log(filePath, '***filePath')
+
         if (!filePath) {
             req.noFile = true;
             next();
@@ -65,6 +68,7 @@ const uploadSingleMiddleware = asyncHandlerExpress((req, res, next) => {
                 }
             });
 
+            console.log(fileName, '***unlink Success')
 
             req.file.serverUploadedName = fileName;
 
