@@ -5,7 +5,8 @@ import { getUser } from "../services/auth/user.services.js";
 
 export const verifyJWT = asyncHandlerExpress(
     async (req, res, next) => {
-        const token = req.cookies?.accessToken;
+        const headerToken = req.headers?.authorization;
+        const token = req.cookies?.accessToken || headerToken;
         if (!token) {
             throw new ApiError(401, 'Unauthorized Access');
         }

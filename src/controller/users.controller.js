@@ -18,7 +18,7 @@ const userLogin = asyncHandlerExpress(
             secure: true,
         };
         res.cookie('accessToken', accessToken, options).json(new ApiResponse(201, {
-            userName, email, role, 'refreshToken': refreshToken
+            userName, email, role, 'refreshToken': refreshToken, 'accessToken': accessToken,
         }, 'User Successfully Logged In'));
     }
 );
