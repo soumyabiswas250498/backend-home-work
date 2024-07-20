@@ -26,7 +26,7 @@ const allHomeWorkServices = async ({ classRoom, subject, authorId }) => {
     subject && (query.subject = subject);
     authorId && (query.author = authorId);
 
-    const homeWorks = await HomeWork.find(query).populate('author', 'userName email _id').exec();
+    const homeWorks = await HomeWork.find(query).sort({ createdAt: -1 }).populate('author', 'userName email _id').exec();
 
     return homeWorks
 }
