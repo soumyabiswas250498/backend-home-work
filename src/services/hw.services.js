@@ -32,7 +32,7 @@ const allHomeWorkServices = async ({ classRoom, subject, authorId }) => {
 }
 
 const getHomeWorkByID = async (id) => {
-    const homework = await HomeWork.findById(id);
+    const homework = await HomeWork.findById(id).populate('author', 'userName email _id').exec();
     return homework;
 }
 
