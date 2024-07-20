@@ -11,8 +11,8 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Ensure the uploads directory exists
-const uploadDir = path.join(__dirname, '../uploads');
+// Use a temporary directory for uploads
+const uploadDir = path.join('/tmp', 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
