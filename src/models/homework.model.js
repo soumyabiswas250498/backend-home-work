@@ -15,7 +15,6 @@ const homeWorkSchema = new Schema(
         subject: {
             type: String,
             required: true,
-            enum: ['English', 'Bengali', 'Math', 'History', 'Geography', 'Physics', 'Chemistry', 'Biology', 'Others']
         },
         author: {
             type: Schema.Types.ObjectId,

@@ -18,10 +18,14 @@ const homeworkSchema = Joi.object({
             'any.required': 'Section is required',
         }),
     subject: Joi.string()
-        .valid('English', 'Bengali', 'Math', 'History', 'Geography', 'Physics', 'Chemistry', 'Biology', 'Others')
+        .valid(
+            'English', 'Bengali', 'Math', 'History', 'Geography', 'Physics', 'Chemistry',
+            'Biology', 'Others', 'Physical Science', 'Life Science', 'General Science',
+            'ENVS', 'H & PE', 'Work Education', 'Pol. Sc.', 'Philosophy', 'Eco Geo', 'Economics'
+        )
         .required()
         .messages({
-            'any.only': 'Subject must be one of: English, Bengali, Math, History, Geography, Physics, Chemistry, Biology, Others',
+            'any.only': 'Subject must be one of: English, Bengali, Math, History, Geography, Physics, Chemistry, Biology, Others, Physical Science, Life Science, General Science, ENVS, H & PE, Work Education, Pol. Sc, Philosophy, Eco Geo, Economics',
             'any.required': 'Subject is required',
         }),
     author: Joi.string().hex().length(24),
