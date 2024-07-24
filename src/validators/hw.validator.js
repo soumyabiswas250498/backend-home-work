@@ -11,7 +11,7 @@ const homeworkSchema = Joi.object({
             'any.required': 'Class is required',
         }),
     section: Joi.string()
-        .valid('a', 'b', 'c', 'd', 'e', 'f', 'arts', 'science', 'commerce')
+        .valid('a', 'b', 'c', 'd', 'e', 'f', 'arts', 'science', 'commerce', 'general', 'vocational')
         .required()
         .messages({
             'any.only': 'Section must be one of: a, b, c, d, e, f, arts, science, commerce',
@@ -19,9 +19,7 @@ const homeworkSchema = Joi.object({
         }),
     subject: Joi.string()
         .valid(
-            'English', 'Bengali', 'Math', 'History', 'Geography', 'Physics', 'Chemistry',
-            'Biology', 'Others', 'Physical Science', 'Life Science', 'General Science',
-            'ENVS', 'H & PE', 'Work Education', 'Pol. Sc.', 'Philosophy', 'Eco Geo', 'Economics'
+            'English', 'Bengali', 'Math', 'History', 'Geography', 'Physics', 'Chemistry', 'Biology', 'Others', 'Physical Science', 'Life Science', 'General Science', 'ENVS', 'H & PE', 'Work Education', 'Pol. Sc.', 'Philosophy', 'Eco Geo', 'Economics', 'Sanskrit', 'ETBC', 'ETEM', 'HWMWA', 'SDEPA'
         )
         .required()
         .messages({

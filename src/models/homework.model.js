@@ -10,7 +10,7 @@ const homeWorkSchema = new Schema(
         section: {
             type: String,
             required: true,
-            enum: ['a', 'b', 'c', 'd', 'e', 'f', 'arts', 'science', 'commerce']
+            enum: ['a', 'b', 'c', 'd', 'e', 'f', 'arts', 'science', 'commerce', 'general', 'vocational']
         },
         subject: {
             type: String,
